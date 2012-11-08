@@ -13,7 +13,7 @@ ENTRY(_start)
     ldr pc, svc_target
     ldr pc, pabt_target
     ldr pc, dabt_target
-    ldr pc, null_target
+    nop /* reserved */
     ldr pc, irq_target
     ldr pc, fiq_target
 
@@ -22,7 +22,6 @@ undef_target: .word undefined_entry
 svc_target:   .word supervisor_entry
 pabt_target:  .word prefetch_entry
 dabt_target:  .word data_entry
-null_target:  .word null_entry
 irq_target:   .word irq_entry
 fiq_target:   .word fiq_entry
 
@@ -40,9 +39,6 @@ ENTRY(prefetch_entry)
     bx  lr
 
 ENTRY(data_entry)
-    bx  lr
-
-ENTRY(null_entry)
     bx  lr
 
 ENTRY(irq_entry)
