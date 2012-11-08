@@ -1,6 +1,7 @@
 /* simple string library */
 
 #include <string.h>
+#include <types.h>
 
 char *strcpy(char *restrict str1, const char *restrict str2)
 {
@@ -24,7 +25,7 @@ int strcmp(const char *str1, const char *str2)
 
 unsigned int strlen(const char *str)
 {
-        unsigned int len = 0;
+        size_t len = 0;
 
         while (*str++ != '\0')
                 ++len;
