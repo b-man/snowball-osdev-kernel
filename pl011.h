@@ -15,6 +15,7 @@ void serial_puts(const char *str);
 #define UART1 0x1000
 #define UART2 0x7000
 
+/* port selection macro */
 #define UART_PORT(uart) (AP9500_MMAP_BASE + uart)
 
 /* UART control registers */
