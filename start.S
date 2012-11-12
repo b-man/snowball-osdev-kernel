@@ -2,6 +2,8 @@
 
 .extern kmain
 
+.section .init
+
 /* reserve 512K for the stack */
 .comm stack, 0x80000
 
@@ -26,8 +28,21 @@ irq_target:   .word irq_entry
 fiq_target:   .word fiq_entry
 
 ENTRY(reset_entry)
+    /* set the stack pointer */
     ldr  sp, =stack+0x80000
-    b    kmain @ branch to kernel main
+
+    /* clear the bss */
+    ldr  r1, =__sbss   /* load bss start adress into r1*/
+    ldr  r2, =__ebss   /* load bss end address into r2 */
+    mov  r0, #0        /* store our zero in r0 */
+    cmp  r1, r2        /* is the bss already cleared? */
+    beq  2f            /* if it is clear, skip over to 2 */
+1:  str  r0, [r1], #4  /* store our zero at address in r1 */
+    cmp  r1, r2        /* is the bss cleared? */
+    bls  1b            /* if not, branch back to 1 */
+2:
+    /* branch to kmain */
+    b    kmain
 
 ENTRY(undefined_entry)
     bx  lr
