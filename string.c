@@ -32,3 +32,27 @@ unsigned int strlen(const char *str)
 
         return len;
 }
+
+int atoi(const char *str)
+{
+        int val = 0;
+        int neg = 0;
+
+        if (*str == '-') {
+            neg = 1;
+            *str++;
+        }
+
+        while (*str != '\0') {
+                if ( *str >= '0' || *str <= '9' ) {
+                    val *= 10;
+                    val += (int)(*str - '0');
+                }
+                *str++;
+        }
+
+        if (neg == 1)
+            val = 0 - val;
+
+        return val;
+}
