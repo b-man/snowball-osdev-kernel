@@ -13,8 +13,11 @@ SECTIONS
         KEEP(*(.init))
     } > kern
     .text : {
-        *(.text*)
-        *(.rodata*) 
+        *(.text) 
+    } > kern
+    .rodata : {
+        *(.rodata)
+        *(.rodata.*)
     } > kern
     .data : {
         *(.data)
@@ -24,4 +27,8 @@ SECTIONS
         *(.bss)
         __ebss = .;
     } > kern
+
+    /DISCARD/ : {
+        *(.comment .note)
+    }
 }
