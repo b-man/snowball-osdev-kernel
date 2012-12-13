@@ -1,4 +1,6 @@
-CC=arm-none-eabi-gcc
+CROSS=arm-none-eabi
+
+CC=$(CROSS)-gcc
 
 CFLAGS=-Wall -Werror -Wno-unused-value -O2 -nostdlib -nostartfiles -ffreestanding -I .
 
@@ -20,10 +22,10 @@ all: kernel
 	$(CC) -I. -c $< -o $@
 
 kernel: $(OBJS)
-	arm-none-eabi-ld -T linker.ld $(OBJS) -o kern.elf
-	arm-none-eabi-objdump -D kern.elf > kern.list
-	arm-none-eabi-objcopy kern.elf -O srec kern.srec
-	arm-none-eabi-objcopy kern.elf -O binary kern.bin
+	$(CROSS)-ld -T linker.ld $(OBJS) -o kern.elf
+	$(CROSS)-objdump -D kern.elf > kern.list
+	$(CROSS)-objcopy kern.elf -O srec kern.srec
+	$(CROSS)-objcopy kern.elf -O binary kern.bin
 
 clean:
 	rm -rf $(OBJS) *.bin *.elf *.list *.srec
