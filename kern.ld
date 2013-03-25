@@ -1,5 +1,3 @@
-/* rammap */
-
 TARGET("elf32-littlearm")
 OUTPUT_FORMAT("elf32-littlearm")
 
