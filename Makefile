@@ -5,7 +5,7 @@ CC=$(CROSS)-gcc
 CFLAGS=-Wall -Werror -Wno-unused-value -O2 -nostdlib -nostartfiles -ffreestanding -I .
 
 # CFLAGS+=-march=armv7-a -mcpu=cortex-a9 -marm # -mfpu=vfpv3 -mfloat-abi=hard
-CFLAGS+=-mcpu=cortex-a9 -marm
+CFLAGS+=-mcpu=cortex-a9 -marm -g
 
 OBJS = \
     start.o \
