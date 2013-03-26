@@ -3,24 +3,26 @@
 #include <pl011.h>
 #include <io.h>
 
-void pl011_putc(int c)
+static volatile void *pl011_port[] = PL011_PORT_LIST_CONFIG;
+
+static void pl011_putc(int port, int c)
 {
-        while (read32(UART_PORT(UART2 + UART_FLAG_REG)) & UART_TXFF_BIT)
+        while (readl((pl011_port[port] + UART_FLAG_REG)) & UART_TXFF_BIT)
                 ;
 
-        write32(UART_PORT(UART2), c);
+        writel(pl011_port[port], c);
 }
 
-void serial_putc(int c)
+void serial_putc(int port, int c)
 {
         if (c == '\n')
-                pl011_putc('\r');
+                pl011_putc(port, '\r');
 
-        pl011_putc(c);
+        pl011_putc(port, c);
 }
 
-void serial_puts(const char *str)
+void serial_puts(int port, const char *str)
 {
         while (*str)
-                serial_putc(*str++);
+                serial_putc(port, *str++);
 }

@@ -6,17 +6,8 @@
 #define PL011_H
 
 /* pl011 driver prototypes */
-void pl011_putc(int c);
-void serial_putc(int c);
-void serial_puts(const char *str);
-
-/* list of available UARTs */
-#define UART0 0x0000
-#define UART1 0x1000
-#define UART2 0x7000
-
-/* port selection macro */
-#define UART_PORT(uart) (AP9500_MMAP_BASE + uart)
+void serial_putc(int port, int c);
+void serial_puts(int port, const char *str);
 
 /* UART control registers */
 #define UART_FLAG_REG 0x18

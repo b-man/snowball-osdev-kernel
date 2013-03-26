@@ -9,18 +9,52 @@
 
 #if defined(__arm__)
 
-/* macros used to read from and write to memory locations */
-#define __arm_write8(addr, val) (*(volatile uint8_t *)(addr) = (val))
-#define __arm_write32(addr, val) (*(volatile uint32_t *)(addr) = (val))
+#define writeb(addr, val) __arm_writeb(addr, val)
+#define writew(addr, val) __arm_writew(addr, val)
+#define writel(addr, val) __arm_writel(addr, val)
 
-#define __arm_read8(addr) (*(volatile uint8_t *)(addr))
-#define __arm_read32(addr) (*(volatile uint32_t *)(addr))
+#define readb(addr) __arm_readb(addr)
+#define readw(addr) __arm_readw(addr)
+#define readl(addr) __arm_readl(addr)
 
-#define write8(addr, val) __arm_write8(addr, val)
-#define write32(addr, val) __arm_write32(addr, val)
+static inline void __arm_writeb(volatile void *addr, uint8_t val)
+{
+	asm volatile("strb %1, %0" : "+Qo" (*(volatile uint8_t *)(addr)) : "r" (val));
+}
 
-#define read8(addr) __arm_read8(addr)
-#define read32(addr) __arm_read32(addr)
+static inline void __arm_writew(volatile void *addr, uint16_t val)
+{
+	asm volatile("strh %1, %0" : "+Qo" (*(volatile uint16_t *)(addr)) : "r" (val));
+}
+
+static inline void __arm_writel(volatile void *addr, uint32_t val)
+{
+	asm volatile("str %1, %0" : "+Qo" (*(volatile uint32_t *)(addr)) : "r" (val));
+}
+
+static inline uint8_t __arm_readb(const volatile void *addr)
+{
+	uint8_t val;
+	asm volatile("ldrb %1, %0" : "+Qo" (*(volatile uint8_t *)(addr)), "=r" (val));
+
+	return val;
+}
+
+static inline uint16_t __arm_readw(const volatile void *addr)
+{
+	uint16_t val;
+	asm volatile("ldrh %1, %0" : "+Qo" (*(volatile uint16_t *)(addr)), "=r" (val));
+
+	return val;
+}
+
+static inline uint32_t __arm_readl(const volatile void *addr)
+{
+	uint32_t val;
+	asm volatile("ldr %1, %0" : "+Qo" (*(volatile uint32_t *)(addr)), "=r" (val));
+
+	return val;
+}
 
 #else
 #error "unsupported architecture"
