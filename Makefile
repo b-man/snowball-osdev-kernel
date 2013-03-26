@@ -2,10 +2,9 @@ CROSS=arm-none-eabi
 
 CC=$(CROSS)-gcc
 
-CFLAGS=-Wall -Werror -Wno-unused-value -O2 -nostdlib -nostartfiles -ffreestanding -I .
+CFLAGS=-Wall -Werror -Wno-unused-value -O2 -g -nostdlib -nostartfiles -ffreestanding -I .
 
-# CFLAGS+=-march=armv7-a -mcpu=cortex-a9 -marm # -mfpu=vfpv3 -mfloat-abi=hard
-CFLAGS+=-mcpu=cortex-a9 -marm -g
+CFLAGS+=-mcpu=cortex-a9 -marm
 
 OBJS = \
     start.o \
@@ -13,7 +12,9 @@ OBJS = \
     pl011.o \
     string.o
 
-all: kernel
+KERN=kernel
+
+all: $(KERN)
 
 %c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -21,11 +22,11 @@ all: kernel
 %S.o:
 	$(CC) -I. -c $< -o $@
 
-kernel: $(OBJS)
-	$(CROSS)-ld -T linker.ld $(OBJS) -o kern.elf
-	$(CROSS)-objdump -D kern.elf > kern.list
-	$(CROSS)-objcopy kern.elf -O srec kern.srec
-	$(CROSS)-objcopy kern.elf -O binary kern.bin
+$(KERN): $(OBJS)
+	$(CROSS)-ld -T kern.ld $(OBJS) -o $(KERN).elf
+	$(CROSS)-objdump -D $(KERN).elf > $(KERN).list
+	$(CROSS)-objcopy $(KERN).elf -O srec $(KERN).srec
+	$(CROSS)-objcopy $(KERN).elf -O binary $(KERN).bin
 
 clean:
 	rm -rf $(OBJS) *.bin *.elf *.list *.srec
