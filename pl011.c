@@ -3,26 +3,38 @@
 #include <pl011.h>
 #include <io.h>
 
-static volatile void *pl011_port[] = PL011_PORT_LIST_CONFIG;
+/* pull in uart configuration */
+extern pl011_cfg pl011_config[32];
 
-static void pl011_putc(int port, int c)
+/* which port to use */
+static int port_select;
+
+void pl011_init(int port)
 {
-        while (readl((pl011_port[port] + UART_FLAG_REG)) & UART_TXFF_BIT)
+	port_select = port;
+	return;
+}
+
+void pl011_putc(int port, int c)
+{
+	addr_t *uart_base = pl011_config[port].base;
+
+        while (readl((uart_base + UART_FLAG_REG)) & UART_TXFF_BIT)
                 ;
 
-        writel(pl011_port[port], c);
+        writel(uart_base, c);
 }
 
-void serial_putc(int port, int c)
+void serial_putc(int c)
 {
         if (c == '\n')
-                pl011_putc(port, '\r');
+                pl011_putc(port_select, '\r');
 
-        pl011_putc(port, c);
+        pl011_putc(port_select, c);
 }
 
-void serial_puts(int port, const char *str)
+void serial_puts(const char *str)
 {
         while (*str)
-                serial_putc(port, *str++);
+                serial_putc(*str++);
 }

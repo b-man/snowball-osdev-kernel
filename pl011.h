@@ -1,13 +1,24 @@
 /* pl011 serial driver - header file */
 
-#include <ap9500.h>
-
 #ifndef PL011_H
 #define PL011_H
 
+#include <ap9500.h>
+#include <types.h>
+#include <io.h>
+
+/* pl011 port configuration structure */
+typedef struct {
+	uint8_t  mode; /* uart mode */
+	uint32_t baud; /* baud rate */
+	addr_t  *base; /* uart base address */
+} pl011_cfg;
+
 /* pl011 driver prototypes */
-void serial_putc(int port, int c);
-void serial_puts(int port, const char *str);
+void pl011_init(int port);
+void pl011_putc(int port, int c);
+void serial_putc(int c);
+void serial_puts(const char *str);
 
 /* UART control registers */
 #define UART_FLAG_REG 0x18

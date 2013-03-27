@@ -1,7 +1,7 @@
-#include <c99.h>
-
 #ifndef STRING_H
 #define STRING_H
+
+#include <c99.h>
 
 int atoi(const char *str);
 unsigned int strlen(const char *str);

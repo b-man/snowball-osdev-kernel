@@ -1,8 +1,7 @@
 #include <pl011.h>
 
-#define CONSOLE_PORT 2
-
 void kmain(void)
 {
-        serial_puts(CONSOLE_PORT, "Welcome to the Snowball!\n");
+	pl011_init(2);
+        serial_puts("Welcome to the Snowball!\n");
 }
