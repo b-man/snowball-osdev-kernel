@@ -1,3 +1,4 @@
+#include <serial.h>
 #include <pl011.h>
 
 void kmain(void)

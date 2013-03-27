@@ -11,7 +11,8 @@ OBJS = \
     start.o \
     kmain.o \
     pl011.o \
-    string.o
+    string.o \
+    serial.o
 
 KERN=kernel
 

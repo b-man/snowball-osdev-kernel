@@ -1,5 +1,6 @@
 /* pl011 serial driver */
 
+#include <serial.h>
 #include <pl011.h>
 #include <io.h>
 
@@ -25,7 +26,13 @@ void pl011_putc(int port, int c)
         writel(uart_base, c);
 }
 
-void serial_putc(int c)
+void pl011_puts(int port, const char *str)
+{
+	while (*str)
+		pl011_putc(port, *str++);
+}
+
+void uart_putc(int c)
 {
         if (c == '\n')
                 pl011_putc(port_select, '\r');
@@ -33,8 +40,14 @@ void serial_putc(int c)
         pl011_putc(port_select, c);
 }
 
-void serial_puts(const char *str)
+void uart_puts(const char *str)
 {
         while (*str)
-                serial_putc(*str++);
+                pl011_putc(port_select, *str++);
 }
+
+/* register this driver */
+serial_driver interface = {
+	uart_putc,
+	uart_puts,
+};

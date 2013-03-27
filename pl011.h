@@ -17,8 +17,7 @@ typedef struct {
 /* pl011 driver prototypes */
 void pl011_init(int port);
 void pl011_putc(int port, int c);
-void serial_putc(int c);
-void serial_puts(const char *str);
+void pl011_puts(int port, const char *str);
 
 /* UART control registers */
 #define UART_FLAG_REG 0x18
