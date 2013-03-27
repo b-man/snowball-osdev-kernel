@@ -2,18 +2,19 @@
 
 #include <serial.h>
 
-extern serial_driver interface;
+extern serial_driver serial_drv;
+
+void serial_init(int port)
+{
+	serial_drv.init(port);
+}
 
 void serial_putc(int c)
 {
-        if (c == '\n')
-                interface.putc('\r');
-
-        interface.putc(c);
+        serial_drv.putc(c);
 }
 
 void serial_puts(const char *str)
 {
-        while (*str)
-                serial_putc(*str++);
+        serial_drv.puts(str);
 }

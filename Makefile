@@ -2,7 +2,7 @@ CROSS=arm-none-eabi
 
 CC=$(CROSS)-gcc
 
-CFLAGS=-Wall -Werror -Wno-unused-value -O2 -g -nostdlib -nostartfiles -ffreestanding -I .
+CFLAGS=-Wall -Werror -Wno-unused-value -O2 -nostdlib -nostartfiles -ffreestanding -I .
 
 CFLAGS+=-mcpu=cortex-a9 -mthumb-interwork
 

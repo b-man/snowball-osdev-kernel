@@ -20,34 +20,38 @@ void pl011_putc(int port, int c)
 {
 	addr_t *uart_base = pl011_config[port].base;
 
-        while (readl((uart_base + UART_FLAG_REG)) & UART_TXFF_BIT)
-                ;
+	while (readl((uart_base + UART_FLAG_REG)) & UART_TXFF_BIT)
+		;
 
-        writel(uart_base, c);
+	writel(uart_base, c);
 }
 
 void pl011_puts(int port, const char *str)
 {
-	while (*str)
+	while (*str) {
+		if (*str == '\n')
+			pl011_putc(port, '\r');
+
 		pl011_putc(port, *str++);
+	}
 }
 
-void uart_putc(int c)
+static void uart_putc(int c)
 {
-        if (c == '\n')
-                pl011_putc(port_select, '\r');
+	if (c == '\n')
+		pl011_putc(port_select, '\r');
 
-        pl011_putc(port_select, c);
+	pl011_putc(port_select, c);
 }
 
-void uart_puts(const char *str)
+static void uart_puts(const char *str)
 {
-        while (*str)
-                pl011_putc(port_select, *str++);
+	pl011_puts(port_select, str);
 }
 
 /* register this driver */
-serial_driver interface = {
+serial_driver serial_drv = {
+	pl011_init,
 	uart_putc,
 	uart_puts,
 };
