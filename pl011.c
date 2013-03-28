@@ -44,16 +44,17 @@ void pl011_init(int port)
 	addr_t *base = pl011_config[port].base;
 
 	/* disable interrupts and turn off the uart */
-	writel((base + UART_ICR), 0xFFF);
-	writel((base + UART_CR), 0x00);
+	writel((base + UART_ICR), UART_ICR_DISA);
+	writel((base + UART_CR), UART_CR_DISA);
 
-	/* set the integer divisor and fraction */
+	/* set the integer divisor and fraction divisor */
 	writel((base + UART_IBRD), 0x1); /* hardcode to 115200 for now */
 	writel((base + UART_FBRD), 0xB); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html */
 
 	/* turn on the uart */
-	writel((base + UART_LCRH_TX), 0x70);
-	writel((base + UART_CR), 0x301);
+	writel((base + UART_LCRH_RX), (UART_LCRH_8WL | UART_LCRH_RXFE));
+	writel((base + UART_LCRH_TX), (UART_LCRH_8WL | UART_LCRH_TXFE));
+	writel((base + UART_CR), (UART_CR_RXE | UART_CR_TXE | UART_XR_UEN));
 
 	port_select = port;
 }
