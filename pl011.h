@@ -1,4 +1,4 @@
-/* Pl011 serial driver - prototypes and definitions
+/* PL011 serial driver - prototypes and definitions
  *
  * Copyright (c) 2013, Brian McKenzie <mckenzba@gmail.com>
  * All rights reserved.
@@ -36,23 +36,67 @@
 #include <types.h>
 #include <io.h>
 
-/* pl011 port configuration structure */
+/* PL011 port configuration structure */
 typedef struct {
 	uint8_t  mode; /* uart mode */
 	uint32_t baud; /* baud rate */
 	addr_t  *base; /* uart base address */
 } pl011_cfg;
 
-/* pl011 driver prototypes */
+/* PL011 driver prototypes */
 void pl011_init(int port);
 void pl011_putc(int port, int c);
 void pl011_puts(int port, const char *str);
 
-/* UART control registers */
-#define UART_FLAG_REG 0x18
+/* PL011 registers */
+#define UART_DR       0x00
 #define UART_RSR_ECR  0x04
+#define UART_DMAWM    0x08
+#define UART_TIMEOUT  0x0C
+#define UART_FR       0x18
+#define UART_LCRH_RX  0x1C
+#define UART_ILPR     0x20
+#define UART_IBRD     0x24
+#define UART_FBRD     0x28
+#define UART_LCRH_TX  0x2C
+#define UART_CR       0x30
+#define UART_IFLS     0x34
+#define UART_IMSC     0x38
+#define UART_RIS      0x3C
+#define UART_MIS      0x40
+#define UART_ICR      0x44
+#define UART_DMACR    0x48
+#define UART_XFCR     0x50
+#define UART_XON1     0x54
+#define UART_XON2     0x58
+#define UART_XOFF1    0x5C
+#define UART_XOFF2    0x60
+#define UART_ITCR     0x80
+#define UART_ITIP     0x84
+#define UART_ITOP     0x88
+#define UART_YDR      0x8C
+#define UART_ABCR     0x100
+#define UART_ABSR     0x104
+#define UART_ABFMT    0x108
+#define UART_ABDR     0x150
+#define UART_ABDFR    0x154
+#define UART_ABMR     0x158
+#define UART_ABIMSC   0x15C
+#define UART_ABRIS    0x160
+#define UART_ABMIS    0x164
+#define UART_ABICR    0x168
+#define UART_IDPROD   0xFD8
+#define UART_IDPROV   0xFDC
+#define UART_PERIPH0  0xFE0
+#define UART_PERIPH1  0xFE4
+#define UART_PERIPH2  0xFE8
+#define UART_PERIPH3  0xFEC
+#define UART_PCELLID0 0xFF0
+#define UART_PCELLID1 0xFF4
+#define UART_PCELLID2 0xFF8
+#define UART_PCELLID3 0xFFC
 
-/* UART status bits */
+/* PL011 status bits */
 #define UART_TXFE_BIT 0x80
 #define UART_RXFF_BIT 0x40
 #define UART_TXFF_BIT 0x20
