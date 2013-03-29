@@ -114,7 +114,7 @@ void pl011_puts(int port, const char *str);
 #define UART_IMSC_RXMS 0x010
 #define UART_IMSC_TXMS 0x020
 
-/* PL011 LCRH word lengths (in bits) */
+/* PL011 LCRH word lengths */
 #define UART_LCRH_8WL  0x060
 #define UART_LCRH_7WL  0x040
 #define UART_LCRH_6WL  0x020

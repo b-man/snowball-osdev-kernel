@@ -41,7 +41,8 @@ static int port_select;
 
 void pl011_init(int port)
 {
-	addr_t *base = pl011_config[port].base;
+	pl011_cfg *config = &pl011_config[port];
+	addr_t *base = config->base;
 
 	/* clear interrupts and turn off the uart */
 	writel((base + UART_ICR), UART_ICR_DISA);
@@ -54,7 +55,7 @@ void pl011_init(int port)
 	/* turn on the uart */
 	writel((base + UART_LCRH_RX), (UART_LCRH_8WL | UART_LCRH_RXFE));
 	writel((base + UART_LCRH_TX), (UART_LCRH_8WL | UART_LCRH_TXFE));
-	writel((base + UART_CR), (UART_CR_UEN | UART_CR_RXE | UART_CR_TXE | UART_CR_RTS));
+	writel((base + UART_CR), (UART_CR_UEN | UART_CR_RXE | UART_CR_TXE));
 
 	/* enable rx and tx interrupts */
 	writel((base + UART_IMSC), (UART_IMSC_RXMS | UART_IMSC_TXMS));
@@ -64,7 +65,8 @@ void pl011_init(int port)
 
 void pl011_putc(int port, int c)
 {
-	addr_t *base = pl011_config[port].base;
+	pl011_cfg *config = &pl011_config[port];
+	addr_t *base = config->base;
 
 	while (readl((base + UART_FR)) & UART_TXFF_BIT)
 		;

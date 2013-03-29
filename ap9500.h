@@ -33,6 +33,9 @@
 #define AP9500_H
 
 /* AP9500-specific memory map defs */
-#define AP9500_MMAP_BASE   0x80000000 /* peripheral base */
+#define AP9500_MMAP_BASE 0x80000000 /* peripheral base */
+
+/* uart clock speed in Hz */
+#define PL011_CLOCK_RATE 38400000
 
 #endif /* !AP9500_H */

@@ -35,15 +35,18 @@ extern serial_driver serial_drv;
 
 void serial_init(int port)
 {
-	serial_drv.init(port);
+	serial_driver *serial = &serial_drv;
+	serial->init(port);
 }
 
 void serial_putc(int c)
 {
-        serial_drv.putc(c);
+	serial_driver *serial = &serial_drv;
+        serial->putc(c);
 }
 
 void serial_puts(const char *str)
 {
-        serial_drv.puts(str);
+	serial_driver *serial = &serial_drv;
+        serial->puts(str);
 }
