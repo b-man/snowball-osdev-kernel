@@ -38,9 +38,9 @@
 
 /* PL011 port configuration structure */
 typedef struct {
-	uint8_t  mode; /* uart mode */
-	uint32_t baud; /* baud rate */
-	addr_t  *base; /* uart base address */
+	uint32_t clock; /* clock speed in Hz */
+	uint32_t baud;  /* baud rate */
+	addr_t  *base;  /* uart base address */
 } pl011_cfg;
 
 /* PL011 driver prototypes */
@@ -105,11 +105,14 @@ void pl011_puts(int port, const char *str);
 #define UART_CR_DISA   0x000
 
 /* PL011 control bits */
-#define UART_LCRH_RXFE 0x008
-#define UART_LCRH_TXFE 0x008
+#define UART_LCRH_RXFE 0x010
+#define UART_LCRH_TXFE 0x010
 #define UART_CR_RXE    0x100
 #define UART_CR_TXE    0x080
 #define UART_CR_UEN    0x001
+#define UART_CR_RTS    0x800
+#define UART_IMSC_RXMS 0x010
+#define UART_IMSC_TXMS 0x020
 
 /* PL011 LCRH word lengths (in bits) */
 #define UART_LCRH_8WL  0x060

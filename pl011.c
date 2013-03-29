@@ -43,18 +43,21 @@ void pl011_init(int port)
 {
 	addr_t *base = pl011_config[port].base;
 
-	/* disable interrupts and turn off the uart */
+	/* clear interrupts and turn off the uart */
 	writel((base + UART_ICR), UART_ICR_DISA);
 	writel((base + UART_CR), UART_CR_DISA);
 
 	/* set the integer divisor and fraction divisor */
-	writel((base + UART_IBRD), 0x1); /* hardcode to 115200 for now */
-	writel((base + UART_FBRD), 0xB); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html */
+	writel((base + UART_IBRD), 0x14); /* hardcode to 115200 for now */
+	writel((base + UART_FBRD), 0x35); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html for formula */
 
 	/* turn on the uart */
 	writel((base + UART_LCRH_RX), (UART_LCRH_8WL | UART_LCRH_RXFE));
 	writel((base + UART_LCRH_TX), (UART_LCRH_8WL | UART_LCRH_TXFE));
-	writel((base + UART_CR), (UART_CR_RXE | UART_CR_TXE | UART_XR_UEN));
+	writel((base + UART_CR), (UART_CR_UEN | UART_CR_RXE | UART_CR_TXE | UART_CR_RTS));
+
+	/* enable rx and tx interrupts */
+	writel((base + UART_IMSC), (UART_IMSC_RXMS | UART_IMSC_TXMS));
 
 	port_select = port;
 }
