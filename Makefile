@@ -26,12 +26,20 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-CROSS=arm-none-eabi
+# cross toolchain name
+CROSS=arm-none-eabi-
 
-CC=$(CROSS)-gcc
+# toolchain tool names
+CC=$(CROSS)gcc
+LD=$(CROSS)ld
+OBJDUMP=$(CROSS)objdump
+OBJCOPY=$(CROSS)objcopy
 
+# compiler and linker flags
 CFLAGS=-Wall -Werror -Wno-unused-value -g -O2 -nostdlib -nostartfiles -ffreestanding -I .
+LFLAGS=-L$(dir $(shell $(CC) -print-libgcc-file-name)) -lgcc
 
+# architecture-specific compiler flags
 CFLAGS+=-mcpu=cortex-a9 -mthumb-interwork
 
 OBJS = \
@@ -53,10 +61,10 @@ all: $(KERN)
 	$(CC) -I. -c $< -o $@
 
 $(KERN): $(OBJS)
-	$(CROSS)-ld -T kern.ld $(OBJS) -o $(KERN).elf
-	$(CROSS)-objdump -D $(KERN).elf > $(KERN).list
-	$(CROSS)-objcopy $(KERN).elf -O srec $(KERN).srec
-	$(CROSS)-objcopy $(KERN).elf -O binary $(KERN).bin
+	$(LD) -T kern.ld $(OBJS) -o $(KERN).elf $(LFLAGS)
+	$(OBJDUMP) -D $(KERN).elf > $(KERN).list
+	$(OBJCOPY) $(KERN).elf -O srec $(KERN).srec
+	$(OBJCOPY) $(KERN).elf -O binary $(KERN).bin
 
 clean:
 	rm -rf $(OBJS) *.bin *.elf *.list *.srec
