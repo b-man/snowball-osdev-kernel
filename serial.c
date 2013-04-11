@@ -1,4 +1,4 @@
-/* Generic serial driver
+/* Generic serial driver interface
  *
  * Copyright (c) 2013, Brian McKenzie <mckenzba@gmail.com>
  * All rights reserved.

@@ -37,16 +37,16 @@ pl011_cfg pl011_config[3] = {
 	{ /* UART0 */
 		.clock = PL011_CLOCK_RATE,
 		.baud  = 115200,
-		.base  = (void *)(AP9500_MMAP_BASE + 0x0000),
+		.base  = (void *)(AP9500_PERIPH1_BASE + 0x0000),
 	},
 	{ /* UART1 */
 		.clock = PL011_CLOCK_RATE,
 		.baud  = 115200,
-		.base  = (void *)(AP9500_MMAP_BASE + 0x1000),
+		.base  = (void *)(AP9500_PERIPH1_BASE + 0x1000),
 	},
 	{ /* UART2 */
 		.clock = PL011_CLOCK_RATE,
 		.baud  = 115200,
-		.base  = (void *)(AP9500_MMAP_BASE + 0x7000),
+		.base  = (void *)(AP9500_PERIPH3_BASE + 0x7000),
 	},
 };

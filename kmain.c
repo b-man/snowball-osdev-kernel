@@ -33,9 +33,24 @@
 
 void kmain(void)
 {
+	int i;
+
 	serial_init(2);
         serial_puts("Welcome to the Snowball!\n");
 	serial_puts("\tThis is a test tab\n");
 	serial_puts("Inserting multiple newlines..\n\n\n\n\n\n...Done!\n");
-	serial_puts("ASCII test:\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=~!@#$%^&*()_+\";:'[]{}\\|,./<>?\nDone!\n\r");
+	serial_puts("ASCII test:\nabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=~!@#$%^&*()_+\";:'[]{}\\|,./<>?\nDone!\n");
+
+	serial_puts("\n\nNow counting forever...\n\n");
+
+        i = '0';
+        while (1) {
+                if ( i <= '9' ) {
+                        serial_puts("count: ");
+                        serial_putc(i);
+                        serial_putc('\r');
+                        ++i;
+                } else
+                        i = '0';
+        }
 }

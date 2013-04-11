@@ -1,4 +1,4 @@
-/* Generic serial driver - structures and prototypes
+/* Generic serial driver interface - structures and prototypes
  *
  * Copyright (c) 2013, Brian McKenzie <mckenzba@gmail.com>
  * All rights reserved.

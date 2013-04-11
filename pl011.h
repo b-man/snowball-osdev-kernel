@@ -32,7 +32,6 @@
 #ifndef PL011_H
 #define PL011_H
 
-#include <ap9500.h>
 #include <types.h>
 #include <io.h>
 
