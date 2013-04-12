@@ -41,16 +41,37 @@ static int port_select;
 
 void pl011_init(int port)
 {
+	int div, frac, rem;
+
 	pl011_cfg *config = &pl011_config[port];
+
 	addr_t *base = config->base;
+	uint32_t baud = config->baud;
+	uint32_t clock = config->clock;
 
 	/* clear interrupts and turn off the uart */
 	writel((base + UART_ICR), UART_ICR_DISA);
 	writel((base + UART_CR), UART_CR_DISA);
 
-	/* set the integer divisor and fraction divisor */
-	writel((base + UART_IBRD), 0x14); /* hardcode to 115200 for now */
-	writel((base + UART_FBRD), 0x35); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html for formula */
+	/* compute the integer and fraction divisor */
+	if (readl(config->base + UART_CR) & UART_CR_OSVFACT) {
+		div = clock / (8 * baud);
+		rem = clock % (8 * baud);
+		frac = ((8 * rem / baud) >> 1);
+		frac += ((8 * rem / baud) & 1);
+	} else {
+		div = clock / (16 * baud);
+		rem = clock % (16 * baud);
+		frac = ((8 * rem / baud) >> 1);
+		frac += ((8 * rem / baud) & 1);
+	}
+
+	/* set the integer and fraction divisor */
+	writel((base + UART_IBRD), div);
+	writel((base + UART_FBRD), frac);
+
+//	writel((base + UART_IBRD), 0x14); /* hardcode to 115200 for now */
+//	writel((base + UART_FBRD), 0x35); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html for formula */
 
 	/* turn on the uart */
 	writel((base + UART_LCRH_RX), (UART_LCRH_8WL | UART_LCRH_RXFE));
@@ -68,7 +89,7 @@ void pl011_putc(int port, int c)
 	pl011_cfg *config = &pl011_config[port];
 	addr_t *base = config->base;
 
-	while (readl((base + UART_FR)) & UART_TXFF_BIT)
+	while (readl(base + UART_FR) & UART_TXFF_BIT)
 		;
 
 	writel(base, c);
