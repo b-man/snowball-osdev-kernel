@@ -70,9 +70,6 @@ void pl011_init(int port)
 	writel((base + UART_IBRD), div);
 	writel((base + UART_FBRD), frac);
 
-//	writel((base + UART_IBRD), 0x14); /* hardcode to 115200 for now */
-//	writel((base + UART_FBRD), 0x35); /* http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0183f/I49493.html for formula */
-
 	/* turn on the uart */
 	writel((base + UART_LCRH_RX), (UART_LCRH_8WL | UART_LCRH_RXFE));
 	writel((base + UART_LCRH_TX), (UART_LCRH_8WL | UART_LCRH_TXFE));
