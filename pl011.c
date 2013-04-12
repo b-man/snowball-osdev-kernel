@@ -54,7 +54,7 @@ void pl011_init(int port)
 	writel((base + UART_CR), UART_CR_DISA);
 
 	/* compute the integer and fraction divisor */
-	if (readl(config->base + UART_CR) & UART_CR_OSVFACT) {
+	if (readl(base + UART_CR) & UART_CR_OSVFACT) {
 		div = clock / (8 * baud);
 		rem = clock % (8 * baud);
 		frac = ((8 * rem / baud) >> 1);
