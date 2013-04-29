@@ -29,8 +29,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdbool.h>
 #include <serial.h>
 #include <pl011.h>
+#include <types.h>
 #include <io.h>
 
 /* pull in uart configuration */
@@ -75,10 +77,33 @@ void pl011_init(int port)
 	writel((base + UART_LCRH_TX), (UART_LCRH_8WL | UART_LCRH_TXFE));
 	writel((base + UART_CR), (UART_CR_UEN | UART_CR_RXE | UART_CR_TXE));
 
-	/* enable rx and tx interrupts */
-	writel((base + UART_IMSC), (UART_IMSC_RXMS | UART_IMSC_TXMS));
+	/* set rx and tx interrupt masks */
+	pl011_rx_interrupt_mask(port, TRUE);
+	pl011_tx_interrupt_mask(port, TRUE);
 
 	port_select = port;
+}
+
+void pl011_rx_interrupt_mask(int port, bool state)
+{
+	pl011_cfg *config = &pl011_config[port];
+	addr_t *base = config->base;
+
+	if (state == TRUE)
+		writel((base + UART_IMSC), (UART_IMSC_RXMS));
+	else
+		writel((base + UART_IMSC), (UART_IMSC_RXMS & ~UART_IMSC_RXMS));
+}
+
+void pl011_tx_interrupt_mask(int port, bool state)
+{
+	pl011_cfg *config = &pl011_config[port];
+	addr_t *base = config->base;
+
+	if (state == TRUE)
+		writel((base + UART_IMSC), (UART_IMSC_TXMS));
+	else
+		writel((base + UART_IMSC), (UART_IMSC_TXMS & ~UART_IMSC_TXMS));
 }
 
 void pl011_putc(int port, int c)

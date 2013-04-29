@@ -32,6 +32,7 @@
 #ifndef PL011_H
 #define PL011_H
 
+#include <stdbool.h>
 #include <types.h>
 #include <io.h>
 
@@ -46,6 +47,8 @@ typedef struct {
 void pl011_init(int port);
 void pl011_putc(int port, int c);
 void pl011_puts(int port, const char *str);
+void pl011_rx_interrupt_mask(int port, bool state);
+void pl011_tx_interrupt_mask(int port, bool state);
 
 /* PL011 registers */
 #define UART_DR         0x000
