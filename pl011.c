@@ -51,7 +51,7 @@ void pl011_init(int port)
 	uint32_t baud = config->baud;
 	uint32_t clock = config->clock;
 
-	/* clear interrupts and turn off the uart */
+	/* disable interrupts and turn off the uart */
 	writel((base + UART_ICR), UART_ICR_DISA);
 	writel((base + UART_CR), UART_CR_DISA);
 
