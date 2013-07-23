@@ -30,6 +30,7 @@
  */
 
 #include "asm.h"
+#include "cpu.h"
 
 .arm
 
@@ -56,8 +57,18 @@ irq_target:   .word irq_entry
 fiq_target:   .word fiq_entry
 
 ENTRY(reset_entry)
-    /* set the stack pointer (512K) */
-    ldr  sp, =0x80000
+
+    /* initialize stack pointers */
+    ldr  r0, =__stack_start /* load the stack base */
+
+    msr  cpsr_c, #(FIQMODE|IBIT|FBIT) /* enter FIQ mode (interrupts disabled)*/
+    mov  sp, r0                       /* set the stack pointer */
+    sub  r0, r0, #0x400               /* subtract reserved size for this mode (1K) */
+    msr  cpsr_c, #(IRQMODE|IBIT|FBIT) /* enter IRQ mode */
+    mov  sp, r0                       /* set the stack pointer */
+    sub  r0, r0, #0x400               /* subtract reserved size for this mode (1K) */
+    msr  cpsr_c, #(SVCMODE|IBIT|FBIT) /* enter SVC mode */
+    mov  sp, r0                       /* set the stack pointer, continue on in this mode */
 
     /* clear the bss */
     ldr  r1, =__sbss   /* load bss start adress into r1*/

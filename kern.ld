@@ -37,6 +37,7 @@ ENTRY(_start)
 MEMORY
 { 
     kern (rwx) : ORIGIN = 0x00100000, LENGTH = 1M
+    kstack (rwx) : ORIGIN = 0x00200000, LENGTH = 64K
 }
 
 SECTIONS
@@ -59,6 +60,14 @@ SECTIONS
         *(.bss)
         __ebss = .;
     } > kern
+
+    .stack : {
+        __stack_start = .;
+        __stack_size = 64K;
+        . = . + __stack_size;
+        . = ALIGN(8);
+        __stack_end = .;
+    } > kstack
 
     /DISCARD/ : {
         *(.comment .note)
