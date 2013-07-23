@@ -29,16 +29,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "cpu.h"
 #include "asm.h"
+
+.arm
 
 .extern kmain
 
 .section .init
-
-/* reserve 512K for the stack */
-.comm stack, 0x80000
-
-.arm
 
 ENTRY(_start)
     ldr pc, reset_target
@@ -59,8 +57,8 @@ irq_target:   .word irq_entry
 fiq_target:   .word fiq_entry
 
 ENTRY(reset_entry)
-    /* set the stack pointer */
-    ldr  sp, =stack+0x80000
+    /* set the stack pointer (512K) */
+    ldr  sp, =0x80000
 
     /* clear the bss */
     ldr  r1, =__sbss   /* load bss start adress into r1*/
