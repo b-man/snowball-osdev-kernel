@@ -61,12 +61,18 @@ ENTRY(reset_entry)
     /* initialize stack pointers */
     ldr  r0, =__stack_start /* load the stack base */
 
-    msr  cpsr_c, #(FIQMODE|IBIT|FBIT) /* enter FIQ mode (interrupts disabled)*/
+    msr  cpsr_c, #(FIQMODE|IBIT|FBIT) /* enter FIQ mode */
     mov  sp, r0                       /* set the stack pointer */
-    sub  r0, r0, #0x400               /* subtract reserved size for this mode (1K) */
+    sub  r0, r0, #0x400               /* reserve 1K of stack for FIQ mode */
     msr  cpsr_c, #(IRQMODE|IBIT|FBIT) /* enter IRQ mode */
     mov  sp, r0                       /* set the stack pointer */
-    sub  r0, r0, #0x400               /* subtract reserved size for this mode (1K) */
+    sub  r0, r0, #0x400               /* reserve 1K of stack for IRQ mode */
+    msr  cpsr_c, #(ABTMODE|IBIT|FBIT) /* enter ABT mode */
+    mov  sp, r0                       /* set stack pointer */
+    sub  r0, r0, #0x400               /* reserve 1K of stack for ABT mode */
+    msr  cpsr_c, #(UNDMODE|IBIT|FBIT) /* enter UND mode */
+    mov  sp, r0                       /* set the stack pointer */
+    sub  r0, r0, #0x400               /* reserve 1K of stack for UND mode */
     msr  cpsr_c, #(SVCMODE|IBIT|FBIT) /* enter SVC mode */
     mov  sp, r0                       /* set the stack pointer, continue on in this mode */
 
