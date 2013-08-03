@@ -114,7 +114,7 @@ void pl011_putc(int port, int c)
 	while (readl(base + UART_FR) & UART_TXFF_BIT)
 		;
 
-	writel(base, c);
+	writeb(base, c);
 }
 
 void pl011_puts(int port, const char *str)
